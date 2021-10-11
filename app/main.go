@@ -30,7 +30,11 @@ var shows = []show{}
 var nextShowId = 0
 
 func findAllContent() {
-    files, err := ioutil.ReadDir("../content/")
+    findDirContent("../content/")
+}
+
+func findDirContent(dir string) {
+    files, err := ioutil.ReadDir(dir)
     if err != nil {
         fmt.Println("Unable to read content directory:", err)
         return
@@ -41,7 +45,7 @@ func findAllContent() {
 
     for _, file := range files {
         if file.IsDir() {
-            s := findShowContent("../content/" + file.Name())
+            s := findShowContent(dir + file.Name())
             if len(s.Episodes) > 0 {
                 shows = append(shows, s)
             }
@@ -50,7 +54,7 @@ func findAllContent() {
 }
 
 func findShowContent(dir string) (show) {
-    fmt.Println("Scanning ", dir)
+    fmt.Println("Scanning", dir)
 
     files, err := ioutil.ReadDir(dir)
     if err != nil {
