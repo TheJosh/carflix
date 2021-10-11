@@ -25,7 +25,7 @@ If content is changed, then you must re-scan; this can be done using the
 Carflix has been tested with a Raspberry Pi 3A which has WiFi support. You
 can also put the PI into "Access Point" mode for fully remove video hosting.
 
-1. Download this repository onto the RPi
+1. Download this repository onto the RPi -- `git clone https://github.com/TheJosh/carflix.git`
 2. Install the GO libraries with `sudo apt install golang`
 3. Install ffmpeg for thumbnail generation, `sudo apt install ffmpeg`
 4. Run with `./run.sh`
