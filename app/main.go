@@ -34,7 +34,15 @@ func findAllContent() {
     shows = make([]show, 0, 32)
     nextShowId = 0
 
+    // Local content directory
     findDirContent("../content/")
+
+    // Videos directory within the homedir
+    // Might not exist, which will be silently be ignored
+    dirname, err := os.UserHomeDir()
+    if err == nil {
+        findDirContent(dirname + "/Videos/")
+    }
 
     // Use lsblk to find all mounted storage
     cmd := exec.Command("lsblk", "--nodeps", "--output=PATH,RM,MOUNTPOINT", "--bytes", "--raw", "--noheading",)
