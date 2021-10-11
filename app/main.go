@@ -31,6 +31,9 @@ var shows = []show{}
 var nextShowId = 0
 
 func findAllContent() {
+    shows = make([]show, 0, 32)
+    nextShowId = 0
+
     findDirContent("../content/")
 
     // Use lsblk to find all mounted storage
@@ -61,9 +64,6 @@ func findDirContent(dir string) {
         fmt.Println("Unable to read content directory:", err)
         return
     }
-
-    shows = make([]show, 0, len(files))
-    nextShowId = 0
 
     for _, file := range files {
         if file.Name()[0] == '.' {
