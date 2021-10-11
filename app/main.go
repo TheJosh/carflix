@@ -45,7 +45,7 @@ func findAllContent() {
     }
 
     // Use lsblk to find all mounted storage
-    cmd := exec.Command("lsblk", "--nodeps", "--output=PATH,RM,MOUNTPOINT", "--bytes", "--raw", "--noheading",)
+    cmd := exec.Command("lsblk", "--output=PATH,RM,MOUNTPOINT", "--raw", "--noheading")
     out, err := cmd.Output()
     if err != nil {
         fmt.Println(err)
@@ -56,8 +56,9 @@ func findAllContent() {
     for _, ln := range lines {
         fields := strings.Split(ln, " ")
 
-        if len(fields) != 3 { continue }    // mounted only
+        if len(fields) != 3 { continue }    // got three columns from lsblk
         if fields[1] != "1" { continue }    // removable only
+        if fields[2] == "" { continue }     // mounted only
 
         fmt.Printf("Found external device %s mounted at %s\n", fields[0], fields[2])
         findDirContent(fields[2] + "/")
