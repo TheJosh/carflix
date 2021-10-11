@@ -39,7 +39,7 @@ func findAllContent() {
 
     // Videos directory within the homedir
     // Might not exist, which will be silently be ignored
-    dirname, err := os.UserHomeDir()
+    dirname, err := os.Getenv("HOME")
     if err == nil {
         findDirContent(dirname + "/Videos/")
     }
