@@ -6,6 +6,7 @@ import (
     "fmt"
     "os"
     "flag"
+    "strings"
     "os/exec"
     "io/ioutil"
     "net/http"
@@ -31,6 +32,27 @@ var nextShowId = 0
 
 func findAllContent() {
     findDirContent("../content/")
+
+    // Use lsblk to find all mounted storage
+    cmd := exec.Command("lsblk", "--nodeps", "--output=PATH,RM,MOUNTPOINT", "--bytes", "--raw", "--noheading",)
+    out, err := cmd.Output()
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+
+    lines := strings.Split(string(out), "\n")
+    for _, ln := range lines {
+        fields := strings.Split(ln, " ")
+
+        if len(fields) != 3 { continue }    // mounted only
+        if fields[1] != "1" { continue }    // removable only
+
+        fmt.Printf("Found external device %s mounted at %s\n", fields[0], fields[2])
+        findDirContent(fields[2] + "/")
+    }
+
+    fmt.Printf("Content indexing complete\n")
 }
 
 func findDirContent(dir string) {
