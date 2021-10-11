@@ -66,6 +66,10 @@ func findDirContent(dir string) {
     nextShowId = 0
 
     for _, file := range files {
+        if file.Name()[0] == '.' {
+            continue
+        }
+
         if file.IsDir() {
             s := findShowContent(dir + file.Name())
             if len(s.Episodes) > 0 {
@@ -87,6 +91,10 @@ func findShowContent(dir string) (show) {
     eps := []episode{}
     epid := 0;
     for _, file := range files {
+        if file.Name()[0] == '.' {
+            continue
+        }
+
         ext := path.Ext(file.Name())
         if ext != ".mp4" {
             continue
