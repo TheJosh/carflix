@@ -37,16 +37,18 @@ unzip 2021-05-07-raspios-buster-armhf-lite.zip
 cd ..
 DISKIMG="dl/2021-05-07-raspios-buster-armhf-lite.img"
 
-# Grow diskimage by 64M so we've got enough space for packages etc
+# Grow diskimage so we've got enough space for packages etc
+info "Growing diskimage"
+dd if=/dev/zero bs=1M count=128 >> "$DISKIMG"
+
 # Grow partition 2 to use the extra space
-info "Growing partition on diskimage"
-dd if=/dev/zero bs=1M count=64 >> "$DISKIMG"
-sudo parted "$DISKIMG" resizepart 2
+info "Growing partition"
+NEWSZ=$( sudo parted -m "$DISKIMG" print | head -2 | tail -1 | cut -d':' -f2 | tr -d MB )
+sudo parted "$DISKIMG" resizepart 2 $NEWSZ
 
 # Get some partition info from the diskimage
-FDISK=$( sudo fdisk -l "$DISKIMG" -o Start )
-
 # Determine sector size and start sector of last (main) partition --> start byte
+FDISK=$( sudo fdisk -l "$DISKIMG" -o Start )
 SECTOR=$( echo "$FDISK" | grep 'Units' | cut -d' ' -f6 )
 START=$( echo "$FDISK" | tail -1 )
 STARTBYTE=$(($SECTOR * $START))
@@ -87,7 +89,7 @@ echo "Done"; echo
 
 # Install dependencies
 info "Installing dependencies"
-$CHROOT apt-get  -y update
+$CHROOT apt-get -y update
 $CHROOT apt-get -y install golang
 
 ###sudo umount -q tmp
