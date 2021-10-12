@@ -90,6 +90,10 @@ echo "Done"; echo
 # Install dependencies
 info "Installing dependencies"
 $CHROOT apt-get -y update
-$CHROOT apt-get -y install golang
+$CHROOT apt-get -y install golang ffmpeg
 
-###sudo umount -q tmp
+info "Unmounting disk img"
+sudo umount -q tmp
+
+info "Done!"
+echo "Disk image is located at $DISKIMG and can be copied onto an SD card"
