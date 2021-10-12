@@ -39,7 +39,7 @@ DISKIMG="dl/2021-05-07-raspios-buster-armhf-lite.img"
 
 # Grow diskimage so we've got enough space for packages etc
 info "Growing diskimage"
-dd if=/dev/zero bs=1M count=128 >> "$DISKIMG"
+dd if=/dev/zero bs=1M count=256 >> "$DISKIMG"
 
 # Grow partition 2 to use the extra space
 info "Growing partition"
@@ -90,7 +90,7 @@ echo "Done"; echo
 # Install dependencies
 info "Installing dependencies"
 $CHROOT apt-get -y update
-$CHROOT apt-get -y install golang ffmpeg
+$CHROOT apt-get -y install golang
 
 info "Unmounting disk img"
 sudo umount -q tmp
