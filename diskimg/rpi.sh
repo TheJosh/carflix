@@ -91,11 +91,11 @@ echo "Done"; echo
 info "Installing dependencies"
 $CHROOT apt-get -y update
 $CHROOT apt-get -y install \
-    golang \        # To run the app
-    usbmount \      # Automounting of usb devices
-    exfat-fuse \    # USB support for ExFat drives
-    ntfs-3g \       # USB support for NFTS drives
-    dnsmasq         # DNS and DHCP server
+    golang \
+    usbmount \
+    exfat-fuse \
+    ntfs-3g \
+    dnsmasq
 
 # Copy across some config files which makes stuff work
 info "Setup config files"
