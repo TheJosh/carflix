@@ -11,9 +11,9 @@ info () {
 }
 
 # Basic setup + cleanup in case of failed previous run
-mkdir -p dl tmp
+mkdir -p dl tmp out
 sudo umount -q tmp || :
-rm -f dl/2021-05-07-raspios-buster-armhf-lite.img
+rm -f out/2021-05-07-raspios-buster-armhf-lite.img
 
 # Make sure we have all build-deps
 info "Build dependencies"
@@ -35,7 +35,8 @@ fi
 info "Extracting diskimage"
 unzip 2021-05-07-raspios-buster-armhf-lite.zip
 cd ..
-DISKIMG="dl/2021-05-07-raspios-buster-armhf-lite.img"
+mv dl/2021-05-07-raspios-buster-armhf-lite.img out/carflix-buster-armhf.img
+DISKIMG="out/carflix-buster-armhf.img"
 
 # Grow diskimage so we've got enough space for packages etc
 info "Growing diskimage"
