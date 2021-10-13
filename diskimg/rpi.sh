@@ -128,8 +128,8 @@ if [ "$APMODE" = "Y" ]; then
 
     # Copy across some config files which makes stuff work
     info "Setup config files"
-    cp conf/interfaces /etc/network/interfaces
-    cp conf/dnsmasq /etc/dnsmasq.d/carflix
+    cp conf/interfaces tmp/etc/network/interfaces
+    cp conf/dnsmasq tmp/etc/dnsmasq.d/carflix
 fi
 echo
 
