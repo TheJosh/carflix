@@ -88,19 +88,35 @@ chown 1000:1000 -R tmp/home/pi/carflix
 echo "Done"; echo
 
 # Install dependencies
-info "Installing dependencies"
+info "Installing app dependencies"
 $CHROOT apt-get -y update
 $CHROOT apt-get -y install \
     golang \
     usbmount \
     exfat-fuse \
-    ntfs-3g \
-    dnsmasq
+    ntfs-3g
 
-# Copy across some config files which makes stuff work
-info "Setup config files"
-cp conf/interfaces /etc/network/interfaces
-cp conf/dnsmasq /etc/dnsmasq.d/carflix
+# Do we want "access point" mode, where the PI is the network host/router?
+while true; do
+    echo
+    read -p "Configure access-point mode? [y/n] " APMODE
+    case $APMODE in
+        [Yy]* ) APMODE="Y"; break;;
+        [Nn]* ) APMODE="N"; break;;
+        * ) echo "Please answer Y or N.";;
+    esac
+done
+
+# Install the extra parts for this
+if [ "$APMODE" = "Y" ]; then
+    info "Installing access-point dependencies"
+    $CHROOT apt-get -y install dnsmasq
+
+    # Copy across some config files which makes stuff work
+    info "Setup config files"
+    cp conf/interfaces /etc/network/interfaces
+    cp conf/dnsmasq /etc/dnsmasq.d/carflix
+fi
 
 info "Unmounting disk img"
 sudo umount -q tmp
