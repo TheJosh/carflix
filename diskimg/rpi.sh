@@ -45,8 +45,7 @@ sync "$DISKIMG"
 
 # Grow partition 2 to use the extra space
 info "Growing partition"
-NEWSZ=$( sudo parted -m "$DISKIMG" print | head -2 | tail -1 | cut -d':' -f2 | tr -d MB )
-sudo parted "$DISKIMG" resizepart 2 $NEWSZ
+sudo parted "$DISKIMG" resizepart 2 100%
 sync "$DISKIMG"
 
 # Get some partition info from the diskimage
@@ -61,7 +60,7 @@ echo "Start byte: $STARTBYTE"
 
 # We grew the partion previously; need to expand filesystem too
 info "Growing filesystem for larger partition"
-sudo losetup /dev/loop10 "$DISKIMG" -o $STARTBYTE
+sudo losetup -P /dev/loop10 "$DISKIMG" -o $STARTBYTE
 sudo resize2fs /dev/loop10
 
 # Make sure it was okay
