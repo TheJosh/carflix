@@ -73,6 +73,8 @@ echo
 # Loop mount the diskimage into the temp directory
 info "Loop mounting"
 sudo mount -o loop,offset=$STARTBYTE "$DISKIMG" tmp
+sudo df -h tmp/usr
+echo
 
 # Now a bunch of commands are run via chroot
 CHROOT="sudo chroot tmp"
@@ -129,10 +131,23 @@ if [ "$APMODE" = "Y" ]; then
     cp conf/interfaces /etc/network/interfaces
     cp conf/dnsmasq /etc/dnsmasq.d/carflix
 fi
+echo
 
+# Did we fill the disk?
+info "Checking free space"
+sudo df -h tmp/usr
+
+# We're done. Unmount the image
 info "Unmounting disk img"
 sudo umount -q tmp
-sync "DISKIMG"
+sync "$DISKIMG"
+
+# Recheck the filesystem was okay
+info "Recheck filesystem"
+sudo losetup /dev/loop10 "$DISKIMG" -o $STARTBYTE
+sudo e2fsck -f /dev/loop10
+sudo losetup -d /dev/loop10
+echo
 
 info "Done!"
 echo
