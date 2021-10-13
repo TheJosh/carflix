@@ -90,7 +90,12 @@ echo "Done"; echo
 # Install dependencies
 info "Installing dependencies"
 $CHROOT apt-get -y update
-$CHROOT apt-get -y install golang usbmount exfat-fuse ntfs-3g
+$CHROOT apt-get -y install \
+    golang \        # To run the app
+    usbmount \      # Automounting of usb devices
+    exfat-fuse \    # USB support for ExFat drives
+    ntfs-3g \       # USB support for NFTS drives
+    dnsmasq         # DNS and DHCP server
 
 info "Unmounting disk img"
 sudo umount -q tmp
