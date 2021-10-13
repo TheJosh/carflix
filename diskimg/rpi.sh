@@ -97,6 +97,11 @@ $CHROOT apt-get -y install \
     ntfs-3g \       # USB support for NFTS drives
     dnsmasq         # DNS and DHCP server
 
+# Copy across some config files which makes stuff work
+info "Setup config files"
+cp conf/interfaces /etc/network/interfaces
+cp conf/dnsmasq /etc/dnsmasq.d/carflix
+
 info "Unmounting disk img"
 sudo umount -q tmp
 
