@@ -41,27 +41,38 @@ DISKIMG="out/carflix-buster-armhf.img"
 # Grow diskimage so we've got enough space for packages etc
 info "Growing diskimage"
 dd if=/dev/zero bs=1M count=256 >> "$DISKIMG"
+sync "$DISKIMG"
 
 # Grow partition 2 to use the extra space
 info "Growing partition"
 NEWSZ=$( sudo parted -m "$DISKIMG" print | head -2 | tail -1 | cut -d':' -f2 | tr -d MB )
 sudo parted "$DISKIMG" resizepart 2 $NEWSZ
+sync "$DISKIMG"
 
 # Get some partition info from the diskimage
 # Determine sector size and start sector of last (main) partition --> start byte
-FDISK=$( sudo fdisk -l "$DISKIMG" -o Start )
+info "Finding partition start byte"
+FDISK=$( sudo fdisk -l "$DISKIMG" -o Start,End,Sectors,Device,Size,Type )
+echo "$FDISK"
 SECTOR=$( echo "$FDISK" | grep 'Units' | cut -d' ' -f6 )
-START=$( echo "$FDISK" | tail -1 )
+START=$( echo "$FDISK" | tail -1 | cut -d' ' -f1 )
 STARTBYTE=$(($SECTOR * $START))
+echo "Start byte: $STARTBYTE"
+
+# We grew the partion previously; need to expand filesystem too
+info "Growing filesystem for larger partition"
+sudo losetup /dev/loop10 "$DISKIMG" -o $STARTBYTE
+sudo resize2fs /dev/loop10
+
+# Make sure it was okay
+info "Checking filesystem"
+sudo e2fsck -f /dev/loop10
+sudo losetup -d /dev/loop10
+echo
 
 # Loop mount the diskimage into the temp directory
 info "Loop mounting"
 sudo mount -o loop,offset=$STARTBYTE "$DISKIMG" tmp
-
-# We grew the partion previously; need to expand filesystem too
-info "Growing filesystem for larger partition"
-LOOPDEV=$( sudo losetup --list | grep "$DISKIMG" | cut -d' ' -f1 )
-sudo resize2fs $LOOPDEV
 
 # Now a bunch of commands are run via chroot
 CHROOT="sudo chroot tmp"
@@ -121,6 +132,7 @@ fi
 
 info "Unmounting disk img"
 sudo umount -q tmp
+sync "DISKIMG"
 
 info "Done!"
 echo
