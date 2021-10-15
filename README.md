@@ -5,6 +5,11 @@ access. Can be installed onto a portable computer (e.g. Raspberry Pi) for
 portable media streaming via a WiFi hotspot.
 
 
+## Getting started
+
+Run with `go run .`
+
+
 ## Content locations
 
 Video content is searched in the following locations:
@@ -23,9 +28,9 @@ If content is changed, then you must re-scan; this can be done using the
 ## Use with a Raspberry Pi
 
 Carflix has been tested with a Raspberry Pi 3A which has WiFi support. You
-can also put the PI into "Access Point" mode for fully remove video hosting.
+can also put the PI into "Access Point" mode for fully remote video hosting.
 
 1. Download this repository onto the RPi -- `git clone https://github.com/TheJosh/carflix.git`
 2. Install the GO libraries with `sudo apt install golang`
 3. Install ffmpeg for thumbnail generation, `sudo apt install ffmpeg`
-4. Run with `./run.sh`
+4. Run with `go run .`
