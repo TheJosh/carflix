@@ -35,7 +35,7 @@ func findAllContent() {
     nextShowId = 0
 
     // Local content directory
-    findDirContent("../content/")
+    findDirContent("content/")
 
     // Videos directory within the homedir
     // Might not exist, which will be silently be ignored
@@ -198,9 +198,9 @@ func main() {
     fmt.Println()
 
     router := gin.Default()
-    router.StaticFile("/", "../assets/index.htm")
-    router.Static("/assets", "../assets")
-    router.Static("/vendor", "../vendor")
+    router.StaticFile("/", "assets/index.htm")
+    router.Static("/assets", "assets")
+    router.Static("/vendor", "assets/vendor")
     router.POST("/reload", reload)
     router.GET("/shows", getShows)
     router.GET("/shows/:sid", getShowByID)
