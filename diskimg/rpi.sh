@@ -90,24 +90,30 @@ fi
 echo "chroot is working: $UNAME"
 echo
 
-# Copy over the app
-info "Installing app into /home/pi/carflix"
-mkdir -p tmp/home/pi/carflix
-cp -r ../app tmp/home/pi/carflix
-cp -r ../assets tmp/home/pi/carflix
-cp -r ../vendor tmp/home/pi/carflix
-cp ../* tmp/home/pi/carflix 2>/dev/null || :
-chown 1000:1000 -R tmp/home/pi/carflix
-echo "Done"; echo
-
 # Install dependencies
 info "Installing app dependencies"
 $CHROOT apt-get -y update
 $CHROOT apt-get -y install \
-    golang \
+    golang git \
     usbmount \
     exfat-fuse \
     ntfs-3g
+
+# Copy source code + build the app
+# This is better than "run" because it won't require git or network
+info "Building and installing app"
+mkdir -p tmp/home/pi/carflix
+cp ../* tmp/home/pi/carflix 2>/dev/null || :
+pushd tmp/home/pi/carflix
+$CHROOT go build .
+popd
+cp -r ../assets tmp/home/pi/carflix
+chown 1000:1000 -R tmp/home/pi/carflix
+echo "Done"; echo
+
+# Ideas for auto-mounting
+# https://raspberrypi.stackexchange.com/a/120933 !??!?!
+# https://raspberrypi.stackexchange.com/questions/66169/auto-mount-usb-stick-on-plug-in-without-uuid/66324#66324
 
 # Do we want "access point" mode, where the PI is the network host/router?
 while true; do
