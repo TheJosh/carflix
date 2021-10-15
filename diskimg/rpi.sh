@@ -15,6 +15,13 @@ mkdir -p dl tmp out
 sudo umount -q tmp || :
 rm -f out/2021-05-07-raspios-buster-armhf-lite.img
 
+# Cross compile app, ready for install later
+# Done first, so that we can catch build failures quickly
+info "Cross-compiling app for ARM"
+pushd ..
+env GOOS=linux GOARCH=arm go build -o carflix-diskimg .
+popd
+
 # Make sure we have all build-deps
 info "Build dependencies"
 sudo apt-get -q install \
@@ -76,7 +83,8 @@ sudo df -h tmp/usr
 echo
 
 # Now a bunch of commands are run via chroot
-CHROOT="sudo chroot tmp"
+PWD=$( pwd )
+CHROOT="sudo chroot $PWD/tmp"
 
 # Let's quickly check that the architecture is correct
 info "Checking chroot is working"
@@ -94,20 +102,15 @@ echo
 info "Installing app dependencies"
 $CHROOT apt-get -y update
 $CHROOT apt-get -y install \
-    golang git \
     usbmount \
     exfat-fuse \
     ntfs-3g
 
 # Copy source code + build the app
 # This is better than "run" because it won't require git or network
-info "Building and installing app"
-mkdir -p tmp/home/pi/carflix
-cp ../* tmp/home/pi/carflix 2>/dev/null || :
-pushd tmp/home/pi/carflix
-$CHROOT go build .
-popd
+info "Installing app"
 cp -r ../assets tmp/home/pi/carflix
+cp ../carflix-diskimg tmp/home/pi/carflix/carflix
 chown 1000:1000 -R tmp/home/pi/carflix
 echo "Done"; echo
 
