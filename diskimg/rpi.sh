@@ -109,8 +109,9 @@ $CHROOT apt-get -y install \
 # Copy source code + build the app
 # This is better than "run" because it won't require git or network
 info "Installing app"
-cp -r ../assets tmp/home/pi/carflix
+mkdir -p tmp/home/pi/carflix
 cp ../carflix-diskimg tmp/home/pi/carflix/carflix
+cp -r ../assets tmp/home/pi/carflix
 chown 1000:1000 -R tmp/home/pi/carflix
 echo "Done"; echo
 
