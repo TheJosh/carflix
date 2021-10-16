@@ -1,8 +1,14 @@
 # Define "carflix" as local to the network
 local=/carflix/
+local=/car.flix/
+local=/carflix.local/
+local=/carflix.com/
 
 # Route this DNS address to the RPI device
 address=/carflix/192.168.42.1
+address=/car.flix/192.168.42.1
+address=/carflix.local/192.168.42.1
+address=/carflix.com/192.168.42.1
 
 # Use the Cloudflare for public DNS lookups
 server=1.1.1.1
@@ -13,4 +19,3 @@ dhcp-range=192.168.42.50,192.168.42.100,12h
 
 # It's a car-private network; we're the only DHCP
 dhcp-authoritative
-
