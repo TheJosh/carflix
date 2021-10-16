@@ -89,6 +89,11 @@ echo
 PWD=$( pwd )
 CHROOT="sudo chroot $PWD/tmp"
 
+# Silence a bunch of irritable warnings
+LANGUAGE=C
+LC_ALL=C
+LANG=C
+
 # Let's quickly check that the architecture is correct
 info "Checking chroot is working"
 UNAME=$( $CHROOT uname -a | grep -i arm )
