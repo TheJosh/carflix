@@ -114,6 +114,9 @@ $CHROOT apt-get -y install \
     exfat-fuse \
     ntfs-3g
 
+# Fix for usbmount auto-mounting
+sudo sed -i "s/PrivateMounts=yes/PrivateMounts=no/" tmp/lib/systemd/system/systemd-udevd.service
+
 # Copy source code + build the app
 # This is better than "run" because it won't require git or network
 info "Installing app"
