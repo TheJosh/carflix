@@ -1,0 +1,27 @@
+# Device to use for WiFi
+interface=wlan0
+
+# Country, for allowed channels and power levels
+country_code=AU
+
+# Use 802.11g on channel 6
+hw_mode=g
+channel=6
+
+# The SSID (network name)
+ssid=CarflixAP
+
+# Security details and password
+wpa=2
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP
+wpa_passphrase=PASSWORD
+
+# Some additional security parameters
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+
+# Enable multimedia extensions
+wmm_enabled=1

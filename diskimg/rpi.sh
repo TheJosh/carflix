@@ -3,6 +3,9 @@
 # Tested on Debian, but should work on other deb systems easily,
 # and can probably be ported to other distros pretty easily
 
+# Country code for WiFi use
+COUNTRY="AU"
+
 set -e
 cd `dirname $0`
 
@@ -133,12 +136,26 @@ done
 # Install the extra parts for this
 if [ "$APMODE" = "Y" ]; then
     info "Installing access-point dependencies"
-    $CHROOT apt-get -y install dnsmasq
+    $CHROOT apt-get -y install hostapd dnsmasq
 
     # Copy across some config files which makes stuff work
-    info "Setup config files"
-    cp conf/interfaces tmp/etc/network/interfaces
-    cp conf/dnsmasq tmp/etc/dnsmasq.d/carflix
+    info "Write config files"
+    sudo cp conf/dnsmasq tmp/etc/dnsmasq.d/carflix
+    sudo cp conf/hostapd tmp/etc/hostapd/hostapd.conf
+    sudo cp conf/rc-local tmp/etc/rc.local
+
+    # This file is appended instead
+    sudo bash -c 'cat conf/dhcpcd-static >> tmp/etc/dhcpcd.conf'
+
+    # Set correct country + enable config for systemd unit
+    sudo sed -i "s/country_code=AU/country_code=$COUNTRY/" tmp/etc/hostapd/hostapd.conf
+    sudo sed -i "s/#DAEMON_CONF=\"\"/DAEMON_CONF=\"\/etc\/hostapd\/hostapd.conf\"/" tmp/etc/default/hostapd
+
+    # Enable the services
+    info "Enable networking services"
+    $CHROOT systemctl unmask hostapd
+    $CHROOT systemctl enable hostapd
+    $CHROOT systemctl enable dnsmasq
 fi
 echo
 

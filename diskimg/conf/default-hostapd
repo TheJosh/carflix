@@ -1,0 +1,2 @@
+# Enable the hostapd config file
+DAEMON_CONF="/etc/hostapd/hostapd.conf"

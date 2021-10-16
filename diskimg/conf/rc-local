@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Nuke the wifi device block
+# This will allow the host ap to work
+rfkill unblock wlan
+
+# Start carflix app
+cd /home/pi/carflix
+./carflix --bind :80 &
+
+exit 0
