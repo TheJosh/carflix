@@ -117,6 +117,9 @@ $CHROOT apt-get -y install \
 # Fix for usbmount auto-mounting
 sudo sed -i "s/PrivateMounts=yes/PrivateMounts=no/" tmp/lib/systemd/system/systemd-udevd.service
 
+# Improved solution (upgrade-safe):
+# https://raspberrypi.stackexchange.com/a/107449
+
 # Copy source code + build the app
 # This is better than "run" because it won't require git or network
 info "Installing app"
@@ -125,10 +128,6 @@ cp ../carflix-diskimg tmp/home/pi/carflix/carflix
 cp -r ../assets tmp/home/pi/carflix
 chown 1000:1000 -R tmp/home/pi/carflix
 echo "Done"; echo
-
-# Ideas for auto-mounting
-# https://raspberrypi.stackexchange.com/a/120933 !??!?!
-# https://raspberrypi.stackexchange.com/questions/66169/auto-mount-usb-stick-on-plug-in-without-uuid/66324#66324
 
 # Do we want "access point" mode, where the PI is the network host/router?
 while true; do
