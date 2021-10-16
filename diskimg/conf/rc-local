@@ -6,6 +6,6 @@ rfkill unblock wlan
 
 # Start carflix app
 cd /home/pi/carflix
-./carflix --bind :80 &
+./carflix --bind :80 >/dev/null 2>&1 &
 
 exit 0
