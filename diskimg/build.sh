@@ -3,8 +3,16 @@
 # Tested on Debian, but should work on other deb systems easily,
 # and can probably be ported to other distros pretty easily
 
+
 # Country code for WiFi use
 COUNTRY="AU"
+
+# Should we configure access-point mode?
+# If set to Y then the rpi will act as an access point hosting
+# it's own private (non-internet) network. Very useful in remote
+# situations such as cars, caravans, boats, etc.
+APMODE="Y"
+
 
 set -e
 cd `dirname $0`
@@ -128,17 +136,6 @@ cp ../carflix-diskimg tmp/home/pi/carflix/carflix
 cp -r ../assets tmp/home/pi/carflix
 chown 1000:1000 -R tmp/home/pi/carflix
 echo "Done"; echo
-
-# Do we want "access point" mode, where the PI is the network host/router?
-while true; do
-    echo
-    read -p "Configure access-point mode? [y/n] " APMODE
-    case $APMODE in
-        [Yy]* ) APMODE="Y"; break;;
-        [Nn]* ) APMODE="N"; break;;
-        * ) echo "Please answer Y or N.";;
-    esac
-done
 
 # Install the extra parts for this
 if [ "$APMODE" = "Y" ]; then
