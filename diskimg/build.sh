@@ -134,21 +134,10 @@ info "Installing app dependencies"
 $CHROOT apt-get -y update
 $CHROOT apt-get -y install \
     usbmount \
-    exfat-fuse ntfs-3g \
-    busybox-syslogd
-
-info "Removing unwanted packages"
-$CHROOT apt-get -y remove --purge \
-    wolfram-engine triggerhappy \
-    anacron logrotate dphys-swapfile \
-    xserver-common lightdm \
-    rsyslog
-$CHROOT apt-get -y autoremove --purge
+    exfat-fuse ntfs-3g
 
 info "Removing unwanted services"
 $CHROOT systemctl disable x11-common
-$CHROOT systemctl disable bootlogs
-$CHROOT systemctl disable console-setup
 
 # Copy source code + build the app
 # This is better than "run" because it won't require git or network
