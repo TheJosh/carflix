@@ -13,6 +13,11 @@ COUNTRY="AU"
 # situations such as cars, caravans, boats, etc.
 APMODE="Y"
 
+# Unmount the loop device once finished. Set this to "N" if you'd
+# like to make your own modifications afterwards. Don't forget to
+# unmount the 'tmp' directory when you're finished!
+UNMOUNT="Y"
+
 
 set -e
 cd `dirname $0`
@@ -166,6 +171,14 @@ echo
 # Did we fill the disk?
 info "Checking free space"
 sudo df -h tmp/usr
+
+# Install the extra parts for this
+if [ "$UNMOUNT" != "Y" ]; then
+    echo
+    info "Done!"
+    echo "As requested, leaving 'tmp' mounted."
+    exit 0
+fi
 
 # We're done. Unmount the image
 info "Unmounting disk img"
