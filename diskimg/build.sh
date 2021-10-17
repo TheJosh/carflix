@@ -151,15 +151,14 @@ echo "Done"; echo
 if [ "$APMODE" = "Y" ]; then
     info "Installing access-point dependencies"
     $CHROOT apt-get -y install hostapd dnsmasq
+    $CHROOT apt-get -y remove dhcpcd5
 
     # Copy across some config files which makes stuff work
     info "Write config files"
     sudo cp conf/dnsmasq tmp/etc/dnsmasq.d/carflix
     sudo cp conf/hostapd tmp/etc/hostapd/hostapd.conf
     sudo cp conf/rc-local tmp/etc/rc.local
-
-    # This file is appended instead
-    sudo bash -c 'cat conf/dhcpcd-static >> tmp/etc/dhcpcd.conf'
+    sudo cp conf/interfaces tmp/etc/network/interfaces
 
     # Set correct country + enable config for systemd unit
     sudo sed -i "s/country_code=AU/country_code=$COUNTRY/" tmp/etc/hostapd/hostapd.conf
