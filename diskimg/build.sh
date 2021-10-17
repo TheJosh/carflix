@@ -121,8 +121,7 @@ echo
 
 info "Couple of useful config tweaks"
 # Some changes to fstab to improve power-loss safety -- mount in "sync" mode
-sudo gawk -i inplace -F '[[:space:]][[:space:]]+' '$2=="/"{$4="defaults,noatime,ro"} 1' tmp/etc/fstab
-sudo echo -c 'cat conf/fstab >> tmp/etc/fstab'
+sudo gawk -i inplace -F '[[:space:]][[:space:]]+' '$2=="/"{$4="defaults,noatime,sync"} 1' tmp/etc/fstab
 # Fix for usbmount auto-mounting
 sudo sed -i "s/PrivateMounts=yes/PrivateMounts=no/" tmp/lib/systemd/system/systemd-udevd.service
 # Improved solution (upgrade-safe):

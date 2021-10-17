@@ -1,5 +1,0 @@
-# Temporary directories using tmpfs, to avoid writes to the sd card
-tmpfs           /tmp            tmpfs   nosuid,nodev         0       0
-tmpfs           /var/log        tmpfs   nosuid,nodev         0       0
-tmpfs           /var/tmp        tmpfs   nosuid,nodev         0       0
-tmpfs           /run            tmpfs   nosuid,nodev         0       0

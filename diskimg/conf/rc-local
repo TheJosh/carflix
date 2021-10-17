@@ -8,4 +8,9 @@ rfkill unblock wlan
 cd /home/pi/carflix
 ./carflix --bind :80 >/dev/null 2>&1 &
 
+# Might be able to switch post-boot
+# This would protect the SD card
+##  mount -o remount,ro /
+##  mount -o remount,ro /boot
+
 exit 0
