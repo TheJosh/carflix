@@ -136,8 +136,22 @@ $CHROOT apt-get -y install \
     usbmount \
     exfat-fuse ntfs-3g
 
-info "Removing unwanted services"
-$CHROOT systemctl disable x11-common
+info "Disable unwanted services"
+$CHROOT systemctl disable regenerate_ssh_host_keys.service
+$CHROOT systemctl disable dphys-swapfile.service
+$CHROOT systemctl disable hciuart.service
+$CHROOT systemctl disable bluetooth.service
+$CHROOT systemctl disable ntp.service
+$CHROOT systemctl disable keyboard-setup.service
+$CHROOT systemctl disable apt-daily.service
+$CHROOT systemctl disable raspi-config.service
+$CHROOT systemctl disable avahi-daemon.service
+$CHROOT systemctl disable triggerhappy.service
+$CHROOT systemctl disable wpa_supplicant.service
+$CHROOT systemctl disable ssh.service
+$CHROOT systemctl disable systemd-timesyncd.service
+$CHROOT systemctl disable alsa-restore.service
+$CHROOT systemctl disable nfs-config.service
 
 # Copy source code + build the app
 # This is better than "run" because it won't require git or network
