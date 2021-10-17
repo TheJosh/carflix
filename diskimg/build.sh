@@ -134,14 +134,21 @@ info "Installing app dependencies"
 $CHROOT apt-get -y update
 $CHROOT apt-get -y install \
     usbmount \
-    exfat-fuse \
-    ntfs-3g
+    exfat-fuse ntfs-3g \
+    busybox-syslogd
 
-# Fix for usbmount auto-mounting
-sudo sed -i "s/PrivateMounts=yes/PrivateMounts=no/" tmp/lib/systemd/system/systemd-udevd.service
+info "Removing unwanted packages"
+$CHROOT apt-get -y remove --purge \
+    wolfram-engine triggerhappy \
+    anacron logrotate dphys-swapfile \
+    xserver-common lightdm \
+    rsyslog
+$CHROOT apt-get -y autoremove --purge
 
-# Improved solution (upgrade-safe):
-# https://raspberrypi.stackexchange.com/a/107449
+info "Removing unwanted services"
+$CHROOT systemctl disable x11-common
+$CHROOT systemctl disable bootlogs
+$CHROOT systemctl disable console-setup
 
 # Copy source code + build the app
 # This is better than "run" because it won't require git or network
